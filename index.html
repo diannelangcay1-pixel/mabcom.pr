@@ -1,0 +1,2870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#eee8ff">
+<title>MindCare — Student Safe Space</title>
+
+<style>
+:root {
+  --ink: #302448;
+  --muted: #766c8a;
+  --purple: #7853ce;
+  --lavender: #f2edff;
+  --line: #e9e0f8;
+  --white: #ffffff;
+  --shadow: 0 20px 40px #7964a526;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Arial, sans-serif;
+  background:
+    radial-gradient(ellipse at 5% 0%, #e5d3ff 0, transparent 40%),
+    radial-gradient(ellipse at 100% 12%, #e7d9ff 0, transparent 40%),
+    linear-gradient(155deg, #f9f7ff, #eee9fc 50%, #f7f3ff);
+  background-attachment: fixed;
+}
+
+button, input, textarea, select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #9472e8;
+  outline-offset: 3px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 245px minmax(0, 1fr);
+  max-width: 1550px;
+  margin: auto;
+  min-height: 100vh;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 30px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  background: #ffffffd9;
+  backdrop-filter: blur(22px);
+  border-right: 1px solid #ffffff;
+  box-shadow: 12px 0 42px #8266aa0b;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 23px;
+  font-weight: 850;
+  letter-spacing: -1px;
+}
+
+.logo small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 550;
+  letter-spacing: .2px;
+}
+
+.logo-icon {
+  padding: 10px;
+  border-radius: 17px;
+  background: linear-gradient(135deg, #fefcff, #cdb5f4);
+  box-shadow:
+    inset 2px 2px 4px #fff,
+    inset -3px -4px 8px #9b79c766,
+    0 8px 15px #6b4b9929;
+}
+
+.nav {
+  display: grid;
+  gap: 8px;
+}
+
+.nav button,
+.mobile-nav button {
+  border: 0;
+  border-radius: 15px;
+  padding: 14px 12px;
+  background: transparent;
+  color: #716683;
+  text-align: left;
+  font-weight: 650;
+}
+
+.nav button:hover {
+  background: #f0e8ff;
+}
+
+.nav button.active {
+  background: linear-gradient(145deg, #f6efff, #dac5f8);
+  color: #5c37ad;
+  box-shadow: inset 1px 2px 3px #fff, 0 5px 14px #8266aa24;
+}
+
+.sidebar-tip {
+  margin-top: auto;
+  padding: 18px;
+  border-radius: 22px;
+  background: linear-gradient(140deg, #f0e1ff, #e9e8ff);
+  font-size: 14px;
+}
+
+.sidebar-tip p {
+  line-height: 1.55;
+}
+
+.school {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.main {
+  min-width: 0;
+  padding: 28px clamp(16px, 3.3vw, 50px) 100px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.eyebrow {
+  color: #8b6cbb;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+}
+
+.top-right {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.avatar {
+  padding: 12px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fefcff, #cdb5f4);
+  box-shadow: var(--shadow);
+}
+
+h1 {
+  margin: 10px 0;
+  font-size: clamp(29px, 4vw, 42px);
+  letter-spacing: -1.4px;
+}
+
+h2 {
+  margin: 0 0 8px;
+  font-size: 23px;
+  letter-spacing: -.6px;
+}
+
+h3 {
+  margin: 0 0 9px;
+  font-size: 17px;
+}
+
+p {
+  line-height: 1.65;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.page {
+  display: none;
+  animation: fade .35s ease;
+}
+
+.page.active {
+  display: block;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  min-height: 236px;
+  margin-bottom: 20px;
+  padding: 28px 32px;
+  overflow: hidden;
+  border: 1px solid #fff;
+  border-radius: 34px;
+  background: linear-gradient(122deg, #fff 10%, #f7f0ff 49%, #e5d3fb);
+  box-shadow: 0 22px 55px #7d5aaa25, inset 0 2px 1px #fff;
+}
+
+.hero p {
+  max-width: 530px;
+  margin: 0 0 18px;
+  color: var(--muted);
+}
+
+.hero-orb {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: 148px;
+  height: 148px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 27% 20%,
+    #fff,
+    #f1dbff 20%,
+    #b794e9 55%,
+    #7950bb 80%,
+    #53307f
+  );
+  box-shadow:
+    inset -15px -18px 28px #50307988,
+    inset 12px 14px 22px #fff9,
+    0 25px 34px #7048a54d;
+  transform: rotate(-20deg);
+}
+
+.hero-orb::after {
+  content: "";
+  position: absolute;
+  top: 14%;
+  left: 22%;
+  width: 40%;
+  height: 19%;
+  border-radius: 50%;
+  background: #fff9;
+  filter: blur(10px);
+}
+
+.btn {
+  padding: 12px 17px;
+  border: 1px solid #fff;
+  border-radius: 19px;
+  background: linear-gradient(145deg, #fff, #eee7fb);
+  color: #6542a8;
+  font-weight: 750;
+  box-shadow: inset 0 2px 2px #fff, 0 9px 19px #775c9a22;
+  transition: transform .2s, box-shadow .2s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(2px) scale(.985);
+}
+
+.btn.primary {
+  background: linear-gradient(145deg, #ad88ed, #7550cc 70%, #6037b5);
+  color: white;
+  box-shadow:
+    inset 0 2px 2px #e7d3ff9c,
+    inset 0 -3px 5px #4b26887a,
+    0 10px 24px #7750c35c;
+}
+
+.btn.danger {
+  background: #fff0f2;
+  color: #a63e5b;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.card {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid #fff;
+  border-radius: 30px;
+  background: linear-gradient(148deg, #ffffffed, #f9f6ffeb);
+  box-shadow:
+    0 19px 45px #7b5e9f21,
+    0 3px 8px #7961a210,
+    inset 0 2px 2px #fff;
+  transition: transform .28s, box-shadow .28s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 27px 56px #7b5e9f2a;
+}
+
+.brain-card {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  background: radial-gradient(
+    circle at 42% 22%,
+    #fff 0,
+    #f7ecff 36%,
+    #e0cff7 75%,
+    #ceb7ee
+  );
+}
+
+.brain-card svg {
+  width: 100%;
+  max-width: 300px;
+  height: 230px;
+  filter: drop-shadow(0 15px 13px #6945972d);
+}
+
+.pill {
+  display: inline-block;
+  padding: 7px 12px;
+  border-radius: 20px;
+  background: #ffffff99;
+  color: #7555a8;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.quick {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.quick button {
+  min-height: 125px;
+  padding: 20px 8px;
+  border: 1px solid #fff;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #fff, #eee7fb);
+  color: var(--ink);
+  font-weight: 700;
+  box-shadow: inset 0 2px 2px #fff, 0 9px 19px #775c9a22;
+}
+
+.quick span {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 30px;
+}
+
+.page-intro {
+  margin-bottom: 25px;
+}
+
+.page-intro p {
+  max-width: 660px;
+  color: var(--muted);
+}
+
+.emotion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 11px;
+}
+
+.emotion {
+  min-height: 104px;
+  padding: 15px 8px;
+  border: 1px solid #fff;
+  border-radius: 19px;
+  background: linear-gradient(155deg, #fff, #f5eeff);
+  color: var(--ink);
+  font-weight: 650;
+  box-shadow: inset 0 2px 1px #fff, 0 8px 14px #72549c16;
+  transition: transform .2s, box-shadow .2s;
+}
+
+.emotion:hover,
+.emotion.selected {
+  transform: translateY(-3px);
+  background: linear-gradient(145deg, #fff, #d9c5f7);
+  box-shadow: 0 12px 19px #7551a42c;
+}
+
+.emotion .emoji {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 30px;
+}
+
+.result {
+  margin-top: 22px;
+  padding: 23px;
+  border: 1px solid #e9dcfa;
+  border-radius: 24px;
+  background: linear-gradient(130deg, #efe3ff, #fff);
+}
+
+[hidden],
+.hidden {
+  display: none !important;
+}
+
+textarea,
+input,
+select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #e5dced;
+  border-radius: 16px;
+  background: #fff;
+  color: var(--ink);
+}
+
+textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.field {
+  display: block;
+  margin: 16px 0 8px;
+  font-weight: 700;
+}
+
+.stack {
+  display: grid;
+  gap: 15px;
+}
+
+.entry {
+  padding: 16px;
+  overflow-wrap: anywhere;
+  border: 1px solid var(--line);
+  border-radius: 19px;
+  background: white;
+}
+
+.entry-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.entry time {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.entry p {
+  white-space: pre-wrap;
+}
+  
+/* ===== SECTION HEADERS ===== */
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 30px 0 17px;
+}
+
+.section-head p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.two-column {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.three-column {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.stat {
+  padding: 20px;
+  border: 1px solid #fff;
+  border-radius: 25px;
+  background: linear-gradient(145deg, #fff, #f0e8ff);
+  box-shadow: var(--shadow);
+}
+
+.stat strong {
+  display: block;
+  margin: 10px 0 5px;
+  font-size: 29px;
+}
+
+.stat span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.divider {
+  height: 1px;
+  margin: 20px 0;
+  background: var(--line);
+}
+
+/* ===== MOOD TRACKER ===== */
+.mood-summary {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 18px;
+  border-radius: 22px;
+  background: linear-gradient(140deg, #f4eaff, #fff);
+}
+
+.mood-summary .emoji {
+  font-size: 43px;
+}
+
+.mood-summary p {
+  margin: 5px 0 0;
+  color: var(--muted);
+}
+
+.mood-history {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.mood-history .entry {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.mood-history .emoji {
+  font-size: 29px;
+}
+
+.mood-history .entry p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ===== JOURNAL ===== */
+.journal-form {
+  padding: 23px;
+  border: 1px solid #fff;
+  border-radius: 27px;
+  background: linear-gradient(145deg, #fff, #f5efff);
+  box-shadow: var(--shadow);
+}
+
+.journal-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.journal-tools .btn {
+  flex: 1;
+}
+
+.journal-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.journal-entry {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 23px;
+  background: #fff;
+}
+
+.journal-entry p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.journal-entry small {
+  color: var(--muted);
+}
+
+/* ===== BREATHING EXERCISE ===== */
+.breathing-wrap {
+  display: grid;
+  place-items: center;
+  padding: 25px 12px;
+  text-align: center;
+}
+
+.breathing-circle {
+  display: grid;
+  place-items: center;
+  width: min(60vw, 230px);
+  height: min(60vw, 230px);
+  margin: 20px auto;
+  border: 9px solid #ffffffb8;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, #fff, #d8c0fa 55%, #a47bdc);
+  box-shadow:
+    inset -12px -15px 24px #7651a84d,
+    inset 10px 10px 18px #fff9,
+    0 20px 35px #7750a833;
+  color: #49306f;
+  transition: transform 4s ease-in-out;
+}
+
+.breathing-circle.inhale {
+  transform: scale(1.12);
+}
+
+.breathing-circle.exhale {
+  transform: scale(.88);
+}
+
+.breathing-circle strong {
+  font-size: 20px;
+}
+
+.breathing-circle span {
+  font-size: 12px;
+}
+
+.breathing-status {
+  min-height: 26px;
+  color: var(--muted);
+}
+
+/* ===== AFFIRMATIONS ===== */
+.quote-card {
+  position: relative;
+  padding: 28px;
+  overflow: hidden;
+  border: 1px solid #fff;
+  border-radius: 28px;
+  background: linear-gradient(135deg, #fff, #eadcff);
+  box-shadow: var(--shadow);
+}
+
+.quote-mark {
+  color: #a98ad9;
+  font-family: Georgia, serif;
+  font-size: 65px;
+  line-height: 1;
+}
+
+.quote-text {
+  font-size: clamp(19px, 3vw, 27px);
+  font-weight: 750;
+  line-height: 1.5;
+}
+
+/* ===== RESOURCES ===== */
+.resource-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.resource-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 17px;
+  background: linear-gradient(145deg, #f6eaff, #d8c3f6);
+  font-size: 24px;
+}
+
+.resource-card p {
+  margin: 6px 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.resource-card a {
+  color: #7048bb;
+  font-weight: 750;
+  overflow-wrap: anywhere;
+}
+
+/* ===== DAILY WELLNESS ===== */
+.wellness-card {
+  margin-bottom: 18px;
+}
+
+.wellness-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.wellness-option {
+  padding: 15px;
+  border: 1px solid #e9ddf7;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #fff, #f8f2ff);
+  color: var(--ink);
+  text-align: left;
+  font-weight: 650;
+}
+
+.wellness-option.selected {
+  border-color: #a889e0;
+  background: linear-gradient(145deg, #f1e5ff, #dac6f8);
+  box-shadow: 0 8px 16px #7650a822;
+}
+
+.wellness-history-entry {
+  margin-top: 12px;
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+}
+
+.wellness-history-entry p {
+  margin: 5px 0;
+  white-space: pre-wrap;
+}
+
+/* ===== SELF-CARE CHECKLIST ===== */
+.selfcare-list {
+  display: grid;
+  gap: 11px;
+  margin: 18px 0;
+}
+
+.selfcare-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 15px;
+  border: 1px solid #eee3fb;
+  border-radius: 17px;
+  background: linear-gradient(140deg, #fff, #faf6ff);
+}
+
+.selfcare-item input {
+  width: 19px;
+  height: 19px;
+  margin: 2px 0 0;
+  accent-color: #8058cb;
+}
+
+.selfcare-item span {
+  line-height: 1.5;
+}
+
+.progress-track {
+  height: 10px;
+  margin: 12px 0;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #e9e0f5;
+}
+
+.progress-fill {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #b69ae9, #7952c8);
+  transition: width .3s ease;
+}
+
+/* ===== DRAWING CANVAS ===== */
+.canvas-wrap {
+  overflow: hidden;
+  border: 1px solid #e6daf5;
+  border-radius: 20px;
+  background: #fff;
+}
+
+#drawingCanvas {
+  display: block;
+  width: 100%;
+  height: 320px;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.drawing-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.drawing-tools input[type="color"] {
+  width: 55px;
+  height: 43px;
+  padding: 4px;
+}
+
+.drawing-tools input[type="range"] {
+  width: 120px;
+}
+
+/* ===== MESSAGE / FOOTER ===== */
+.message {
+  min-height: 22px;
+  margin-top: 10px;
+  color: #6d4aaa;
+  font-size: 13px;
+}
+
+.footer {
+  margin-top: 35px;
+  padding: 20px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 12px;
+}
+
+/* ===== MOBILE NAVIGATION ===== */
+.mobile-nav {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 205px minmax(0, 1fr);
+  }
+
+  .grid,
+  .three-column {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero-orb {
+    width: 105px;
+    height: 105px;
+  }
+
+  .quick {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .layout {
+    display: block;
+  }
+
+  .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    padding: 15px;
+    border-right: 0;
+    border-bottom: 1px solid #fff;
+  }
+
+  .sidebar-tip,
+  .school {
+    display: none;
+  }
+
+  .nav {
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+  }
+
+  .nav button {
+    flex: none;
+    padding: 11px 13px;
+    white-space: nowrap;
+    font-size: 12px;
+  }
+
+  .main {
+    padding: 20px 14px 90px;
+  }
+
+  .top {
+    margin-bottom: 20px;
+  }
+
+  .hero {
+    min-height: 210px;
+    padding: 22px;
+    border-radius: 25px;
+  }
+
+  .hero-orb {
+    width: 75px;
+    height: 75px;
+  }
+
+  .grid,
+  .two-column,
+  .three-column {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 19px;
+    border-radius: 24px;
+  }
+
+  .emotion-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wellness-options {
+    grid-template-columns: 1fr;
+  }
+
+  .top-right > span {
+    display: none;
+  }
+
+  h1 {
+    font-size: 30px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+
+</head>
+<body>
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">✿</div>
+      <div>
+        <h2>MindCare</h2>
+        <p>Student Safe Space</p>
+      </div>
+    </div>
+
+    <div class="school">
+      <span class="school-dot"></span>
+      YOUR PERSONAL WELLNESS SPACE
+    </div>
+
+    <nav class="nav" aria-label="Main navigation">
+      <button class="nav-link active" data-page="home">
+        <span>⌂</span> Home
+      </button>
+      <button class="nav-link" data-page="mood">
+        <span>☻</span> Mood Tracker
+      </button>
+      <button class="nav-link" data-page="journal">
+        <span>▤</span> My Journal
+      </button>
+      <button class="nav-link" data-page="breathing">
+        <span>◉</span> Breathing Exercise
+      </button>
+      <button class="nav-link" data-page="affirmations">
+        <span>✧</span> Affirmations
+      </button>
+      <button class="nav-link" data-page="resources">
+        <span>♡</span> Help & Resources
+      </button>
+      <button class="nav-link" data-page="wellness">
+        <span>☀</span> Daily Wellness
+      </button>
+      <button class="nav-link" data-page="selfcare">
+        <span>✓</span> Self-Care Checklist
+      </button>
+      <button class="nav-link" data-page="drawing">
+        <span>✎</span> Creative Corner
+      </button>
+    </nav>
+
+    <div class="sidebar-tip">
+      <div class="tip-icon">🌱</div>
+      <h3>One day at a time.</h3>
+      <p>You don't have to figure everything out today. Small steps count, too.</p>
+    </div>
+
+    <div class="sidebar-bottom">
+      <span>💜</span>
+      <p>A gentle reminder: your feelings matter.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="top">
+      <div>
+        <p class="eyebrow">YOUR SPACE, YOUR PACE</p>
+        <h1 id="pageHeading">Welcome to MindCare</h1>
+      </div>
+      <div class="top-right">
+        <span class="today-label" id="todayLabel"></span>
+        <div class="avatar">M</div>
+      </div>
+    </header>
+
+    <!-- HOME PAGE -->
+    <section class="page active" id="page-home">
+      <div class="hero">
+        <div class="hero-content">
+          <p class="eyebrow">A LITTLE SPACE JUST FOR YOU</p>
+          <h2>It's okay to take a <span>breath.</span></h2>
+          <p>
+            School can be a lot sometimes. Take a moment to check in with
+            yourself, express what you're feeling, and remember that you
+            don't have to be perfect to be doing your best.
+          </p>
+          <button class="btn btn-primary" data-go="mood">
+            Check in with yourself <span>→</span>
+          </button>
+        </div>
+        <div class="hero-orb" aria-hidden="true">
+          <div class="orb-inner">
+            <span>☁</span>
+            <strong>You are<br>enough.</strong>
+            <small>always & forever</small>
+          </div>
+        </div>
+        <div class="hero-decoration decoration-one"></div>
+        <div class="hero-decoration decoration-two"></div>
+      </div>
+
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">YOUR WELLNESS TOOLKIT</p>
+          <h2>What do you need today?</h2>
+        </div>
+        <p class="section-subtitle">Choose what feels right for you.</p>
+      </div>
+
+      <div class="grid quick">
+        <button class="card quick-card" data-go="mood">
+          <div class="quick-icon lavender">☻</div>
+          <h3>Check my mood</h3>
+          <p>Give your feelings a name.</p>
+          <span class="card-arrow">→</span>
+        </button>
+        <button class="card quick-card" data-go="journal">
+          <div class="quick-icon peach">✎</div>
+          <h3>Write it out</h3>
+          <p>Let your thoughts find a page.</p>
+          <span class="card-arrow">→</span>
+        </button>
+        <button class="card quick-card" data-go="breathing">
+          <div class="quick-icon mint">◉</div>
+          <h3>Take a breath</h3>
+          <p>Slow down for a moment.</p>
+          <span class="card-arrow">→</span>
+        </button>
+        <button class="card quick-card" data-go="wellness">
+          <div class="quick-icon yellow">☀</div>
+          <h3>Daily wellness</h3>
+          <p>Notice what you need today.</p>
+          <span class="card-arrow">→</span>
+        </button>
+      </div>
+
+      <div class="grid home-bottom">
+        <div class="card quote-card">
+          <div class="quote-mark">“</div>
+          <p id="homeQuote">
+            You are allowed to be both a work in progress and proud of yourself.
+          </p>
+          <span>YOUR GENTLE REMINDER</span>
+          <button class="text-button" id="newQuote">Give me another reminder ↻</button>
+        </div>
+
+        <div class="card checkin-card">
+          <div class="card-title-row">
+            <div>
+              <p class="eyebrow">A MOMENT FOR YOU</p>
+              <h3>How are you, really?</h3>
+            </div>
+            <span class="mini-icon">♡</span>
+          </div>
+          <p class="muted">
+            You don't need to have the perfect words. Just start wherever you are.
+          </p>
+          <button class="btn btn-secondary" data-go="journal">
+            Open my journal →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MOOD TRACKER PAGE -->
+    <section class="page" id="page-mood">
+      <div class="page-intro">
+        <p class="eyebrow">EMOTIONAL CHECK-IN</p>
+        <h2>How are you feeling today?</h2>
+        <p>
+          There are no wrong answers. Your emotions are information, not a
+          measure of your worth. Choose what best describes how you feel.
+        </p>
+      </div>
+
+      <div class="card mood-card">
+        <div class="card-title-row">
+          <div>
+            <p class="eyebrow">TODAY'S MOOD</p>
+            <h3>What is your mood right now?</h3>
+          </div>
+          <span class="mini-icon">☻</span>
+        </div>
+
+        <div class="emotion-grid" id="emotionGrid">
+          <button class="emotion" data-mood="Happy" data-emoji="😊">
+            <span>😊</span><strong>Happy</strong>
+          </button>
+          <button class="emotion" data-mood="Calm" data-emoji="😌">
+            <span>😌</span><strong>Calm</strong>
+          </button>
+          <button class="emotion" data-mood="Excited" data-emoji="🤩">
+            <span>🤩</span><strong>Excited</strong>
+          </button>
+          <button class="emotion" data-mood="Okay" data-emoji="🙂">
+            <span>🙂</span><strong>Okay</strong>
+          </button>
+          <button class="emotion" data-mood="Tired" data-emoji="😴">
+            <span>😴</span><strong>Tired</strong>
+          </button>
+          <button class="emotion" data-mood="Anxious" data-emoji="😟">
+            <span>😟</span><strong>Anxious</strong>
+          </button>
+          <button class="emotion" data-mood="Sad" data-emoji="😢">
+            <span>😢</span><strong>Sad</strong>
+          </button>
+          <button class="emotion" data-mood="Overwhelmed" data-emoji="🥺">
+            <span>🥺</span><strong>Overwhelmed</strong>
+          </button>
+        </div>
+
+        <div class="field">
+          <label for="moodNote">Would you like to add a note? (optional)</label>
+          <textarea id="moodNote" rows="3" maxlength="1000"
+            placeholder="What's been on your mind today?"></textarea>
+        </div>
+
+        <button class="btn btn-primary" id="saveMood">Save my check-in</button>
+        <p class="message" id="moodMessage" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="card history-card">
+        <div class="card-title-row">
+          <div>
+            <p class="eyebrow">YOUR PERSONAL RECORD</p>
+            <h3>Recent mood check-ins</h3>
+          </div>
+          <button class="text-button" id="clearMoods">Clear history</button>
+        </div>
+        <div id="moodHistory" class="entry-list">
+          <p class="empty-state">Your saved check-ins will appear here.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- JOURNAL PAGE -->
+    <section class="page" id="page-journal">
+      <div class="page-intro">
+        <p class="eyebrow">A PAGE THAT LISTENS</p>
+        <h2>Let your thoughts out.</h2>
+        <p>
+          Write freely, without judging yourself. You can write about your day,
+          your worries, your wins, or anything you need to express.
+        </p>
+      </div>
+
+      <div class="card journal-card">
+        <div class="card-title-row">
+          <div>
+            <p class="eyebrow">MY PRIVATE JOURNAL</p>
+            <h3>What's on your mind?</h3>
+          </div>
+          <span class="mini-icon">✎</span>
+        </div>
+
+        <div class="field">
+          <label for="journalTitle">Entry title</label>
+          <input type="text" id="journalTitle" maxlength="100"
+            placeholder="Give today's thoughts a title">
+        </div>
+
+        <div class="field">
+          <label for="journalPrompt">A little inspiration (optional)</label>
+          <select id="journalPrompt">
+            <option value="">Choose a writing prompt</option>
+            <option>Something I'm proud of today is...</option>
+            <option>Something I wish people understood about me is...</option>
+            <option>Right now, I need...</option>
+            <option>One thing I can let go of is...</option>
+            <option>A small thing that made me happy was...</option>
+            <option>If I could tell myself one kind thing, it would be...</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="journalText">Your thoughts</label>
+          <textarea id="journalText" rows="9" maxlength="10000"
+            placeholder="Start writing here... this space is yours."></textarea>
+          <div class="character-count"><span id="journalCount">0</span> / 10000</div>
+        </div>
+
+        <div class="button-row">
+          <button class="btn btn-primary" id="saveJournal">Save entry</button>
+          <button class="btn btn-secondary" id="clearJournal">Clear draft</button>
+        </div>
+        <p class="message" id="journalMessage" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="card history-card">
+        <div class="card-title-row">
+          <div>
+            <p class="eyebrow">YOUR WRITTEN MOMENTS</p>
+            <h3>Past journal entries</h3>
+          </div>
+          <button class="text-button" id="clearJournalHistory">Clear history</button>
+        </div>
+        <div id="journalHistory" class="entry-list">
+          <p class="empty-state">Your saved entries will appear here.</p>
+        </div>
+      </div>
+    </section>
+
+            
+    <!-- BREATHING EXERCISE PAGE -->
+    <section class="page" id="page-breathing">
+      <div class="page-intro">
+        <p class="eyebrow">PAUSE • BREATHE • RESET</p>
+        <h2>Let's take a breath.</h2>
+        <p>
+          Give yourself a short break. Follow the circle at a comfortable pace.
+          You can stop whenever you need to.
+        </p>
+      </div>
+
+      <div class="card breathing-card">
+        <div class="breathing-visual">
+          <div class="breathing-circle" id="breathingCircle">
+            <div class="breathing-circle-inner">
+              <span id="breathingInstruction">Ready?</span>
+              <strong id="breathingCountdown">—</strong>
+            </div>
+          </div>
+        </div>
+
+        <p class="breathing-caption" id="breathingCaption">
+          Find a comfortable position and relax your shoulders.
+        </p>
+
+        <div class="breathing-settings">
+          <label for="breathingDuration">Practice duration</label>
+          <select id="breathingDuration">
+            <option value="60">1 minute</option>
+            <option value="120">2 minutes</option>
+            <option value="180">3 minutes</option>
+          </select>
+        </div>
+
+        <div class="button-row centered">
+          <button class="btn btn-primary" id="startBreathing">Start breathing</button>
+          <button class="btn btn-secondary" id="stopBreathing">Stop</button>
+        </div>
+
+        <p class="message" id="breathingMessage" role="status" aria-live="polite"></p>
+        <p class="muted small-note">
+          Keep your breathing gentle and natural. If you feel dizzy or uncomfortable,
+          stop and breathe normally.
+        </p>
+      </div>
+
+      <div class="grid breathing-tips">
+        <div class="card tip-card">
+          <span class="quick-icon lavender">🌿</span>
+          <h3>Relax your body</h3>
+          <p>Unclench your jaw and let your shoulders rest.</p>
+        </div>
+        <div class="card tip-card">
+          <span class="quick-icon mint">☁</span>
+          <h3>Be where you are</h3>
+          <p>You don't need to solve everything in this moment.</p>
+        </div>
+        <div class="card tip-card">
+          <span class="quick-icon peach">♡</span>
+          <h3>Go at your pace</h3>
+          <p>There is no perfect way to take a mindful pause.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- AFFIRMATIONS PAGE -->
+    <section class="page" id="page-affirmations">
+      <div class="page-intro">
+        <p class="eyebrow">KIND WORDS FOR YOURSELF</p>
+        <h2>A little reminder for your heart.</h2>
+        <p>
+          You don't have to believe every affirmation immediately. Read one,
+          reflect on it, and keep the words that feel helpful to you.
+        </p>
+      </div>
+
+      <div class="card affirmation-main">
+        <div class="affirmation-sparkle">✧</div>
+        <p class="eyebrow">YOUR AFFIRMATION</p>
+        <blockquote id="affirmationText">
+          I am allowed to learn, grow, and take things one step at a time.
+        </blockquote>
+        <p class="affirmation-note">Take what you need. Leave what you don't.</p>
+        <button class="btn btn-primary" id="newAffirmation">
+          Another affirmation ↻
+        </button>
+        <button class="btn btn-secondary" id="saveAffirmation">
+          ♡ Save this affirmation
+        </button>
+        <p class="message" id="affirmationMessage" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">WORDS TO COME BACK TO</p>
+          <h2>Choose a reminder</h2>
+        </div>
+      </div>
+
+      <div class="grid affirmation-grid" id="affirmationGrid">
+        <button class="card affirmation-choice" data-affirmation="I do not have to be perfect to be worthy of kindness.">
+          <span>01</span>
+          <p>I do not have to be perfect to be worthy of kindness.</p>
+        </button>
+        <button class="card affirmation-choice" data-affirmation="My pace is valid, even when it is different from everyone else's.">
+          <span>02</span>
+          <p>My pace is valid, even when it is different from everyone else's.</p>
+        </button>
+        <button class="card affirmation-choice" data-affirmation="Rest is part of taking care of myself, not a failure.">
+          <span>03</span>
+          <p>Rest is part of taking care of myself, not a failure.</p>
+        </button>
+        <button class="card affirmation-choice" data-affirmation="I can ask for help when things feel difficult.">
+          <span>04</span>
+          <p>I can ask for help when things feel difficult.</p>
+        </button>
+        <button class="card affirmation-choice" data-affirmation="One difficult day does not define my whole story.">
+          <span>05</span>
+          <p>One difficult day does not define my whole story.</p>
+        </button>
+        <button class="card affirmation-choice" data-affirmation="I deserve respect, care, and understanding.">
+          <span>06</span>
+          <p>I deserve respect, care, and understanding.</p>
+        </button>
+      </div>
+
+      <div class="card history-card">
+        <div class="card-title-row">
+          <div>
+            <p class="eyebrow">YOUR FAVORITES</p>
+            <h3>Saved affirmations</h3>
+          </div>
+          <button class="text-button" id="clearAffirmations">Clear saved</button>
+        </div>
+        <div id="savedAffirmations" class="entry-list">
+          <p class="empty-state">Affirmations you save will appear here.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- HELP AND RESOURCES PAGE -->
+    <section class="page" id="page-resources">
+      <div class="page-intro">
+        <p class="eyebrow">YOU DON'T HAVE TO DO IT ALONE</p>
+        <h2>Help is a strength.</h2>
+        <p>
+          If something feels too heavy to handle on your own, reaching out to a
+          trusted person or qualified professional can be a helpful next step.
+        </p>
+      </div>
+
+      <div class="resource-banner">
+        <div class="resource-banner-icon">💜</div>
+        <div>
+          <h3>Your feelings deserve to be taken seriously.</h3>
+          <p>
+            Consider talking with a trusted adult, family member, school counselor,
+            teacher, or healthcare professional.
+          </p>
+        </div>
+      </div>
+
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">PEOPLE WHO CAN SUPPORT YOU</p>
+          <h2>Where can you start?</h2>
+        </div>
+      </div>
+
+      <div class="grid resource-grid">
+        <div class="card resource-card">
+          <div class="quick-icon lavender">🏫</div>
+          <h3>School counselor</h3>
+          <p>
+            Ask your school whether a guidance counselor or student support service
+            is available. You can start by saying that you'd like someone to talk to.
+          </p>
+        </div>
+
+        <div class="card resource-card">
+          <div class="quick-icon peach">🏡</div>
+          <h3>Trusted adult</h3>
+          <p>
+            Reach out to a family member, teacher, coach, or another adult who
+            listens respectfully and helps you feel safe.
+          </p>
+        </div>
+
+        <div class="card resource-card">
+          <div class="quick-icon mint">🩺</div>
+          <h3>Healthcare professional</h3>
+          <p>
+            A doctor or mental health professional can help you understand what
+            you're experiencing and discuss suitable support.
+          </p>
+        </div>
+
+        <div class="card resource-card">
+          <div class="quick-icon yellow">🤝</div>
+          <h3>Someone who listens</h3>
+          <p>
+            If talking feels difficult, you could write down what you want to say
+            or ask someone you trust to sit with you while you explain.
+          </p>
+        </div>
+      </div>
+
+      <div class="card resource-note">
+        <p class="eyebrow">IF YOU NEED URGENT HELP</p>
+        <h3>Your immediate safety comes first.</h3>
+        <p>
+          If you are in immediate danger or experiencing a medical emergency in
+          the Philippines, contact local emergency services or go to the nearest
+          emergency department. If possible, tell a trusted adult and ask them
+          to stay with you while you get help.
+        </p>
+        <p class="muted small-note">
+          MindCare is a student wellness project, not a substitute for professional
+          care or emergency services.
+        </p>
+      </div>
+    </section>
+
+    <!-- DAILY WELLNESS PAGE -->
+    <section class="page" id="page-wellness">
+      <div class="page-intro">
+        <p class="eyebrow">A GENTLE DAILY CHECK-IN</p>
+        <h2>What do you need today?</h2>
+        <p>
+          You don't need to do everything at once. Choose the things that might
+          support you today, and reflect on how you're feeling.
+        </p>
+      </div>
+
+      <div class="card wellness-card">
+        <div class="card-title-row">
+          <div>
+            <p class="eyebrow">TODAY'S NEEDS</p>
+            <h3>Today, I could use more...</h3>
+          </div>
+          <span class="mini-icon">☀</span>
+        </div>
+
+        <div class="wellness-options" id="wellnessOptions">
+          <label class="wellness-option">
+            <input type="checkbox" value="Rest">
+            <span>😴 Rest</span>
+          </label>
+          <label class="wellness-option">
+            <input type="checkbox" value="Connection">
+            <span>🤝 Connection</span>
+          </label>
+          <label class="wellness-option">
+            <input type="checkbox" value="Movement">
+            <span>🌿 Gentle movement</span>
+          </label>
+          <label class="wellness-option">
+            <input type="checkbox" value="Quiet">
+            <span>☁ Quiet time</span>
+          </label>
+          <label class="wellness-option">
+            <input type="checkbox" value="Encouragement">
+            <span>💜 Encouragement</span>
+          </label>
+          <label class="wellness-option">
+            <input type="checkbox" value="Fun">
+            <span>🎨 Something fun</span>
+          </label>
+        </div>
+
+        <div class="field">
+          <label for="wellnessReflection">One kind thing I can do for myself today is...</label>
+          <textarea id="wellnessReflection" rows="4" maxlength="2000"
+            placeholder="It can be something small."></textarea>
+        </div>
+
+        <button class="btn btn-primary" id="saveWellness">Save my reflection</button>
+        <p class="message" id="wellnessMessage" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="card history-card">
+        <div class="card-title-row">
+          <div>
+            <p class="eyebrow">LOOKING BACK GENTLY</p>
+            <h3>Past reflections</h3>
+          </div>
+          <button class="text-button" id="clearWellnessHistory">Clear history</button>
+        </div>
+        <div id="wellnessHistory" class="entry-list">
+          <p class="empty-state">Your saved reflections will appear here.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SELF-CARE CHECKLIST PAGE -->
+    <section class="page" id="page-selfcare">
+      <div class="page-intro">
+        <p class="eyebrow">SMALL STEPS COUNT</p>
+        <h2>Take care of you, too.</h2>
+        <p>
+          Self-care doesn't have to be complicated. Choose small, realistic
+          activities that support your well-being. You don't need to complete
+          everything to have a meaningful day.
+        </p>
+      </div>
+
+      <div class="card selfcare-card">
+        <div class="card-title-row">
+          <div>
+            <p class="eyebrow">YOUR DAILY CHECKLIST</p>
+            <h3>What have you done for yourself?</h3>
+          </div>
+          <span class="mini-icon">✓</span>
+        </div>
+
+        <div class="progress-info">
+          <span id="selfcareProgressText">0 of 8 completed</span>
+          <span id="selfcareProgressPercent">0%</span>
+        </div>
+        <div class="progress-track" role="progressbar"
+          aria-label="Self-care checklist progress"
+          aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
+          id="selfcareProgress">
+          <div class="progress-fill" id="selfcareProgressFill"></div>
+        </div>
+
+        <div class="selfcare-list" id="selfcareList">
+          <label class="selfcare-item">
+            <input type="checkbox" value="drank-water">
+            <span class="selfcare-check"></span>
+            <span class="selfcare-copy">
+              <strong>Drink some water</strong>
+              <small>Give your body the hydration it needs.</small>
+            </span>
+            <span class="selfcare-emoji">💧</span>
+          </label>
+
+          <label class="selfcare-item">
+            <input type="checkbox" value="ate">
+            <span class="selfcare-check"></span>
+            <span class="selfcare-copy">
+              <strong>Eat something nourishing</strong>
+              <small>Make time for a meal or a snack.</small>
+            </span>
+            <span class="selfcare-emoji">🍎</span>
+          </label>
+
+          <label class="selfcare-item">
+            <input type="checkbox" value="rested">
+            <span class="selfcare-check"></span>
+            <span class="selfcare-copy">
+              <strong>Take a break</strong>
+              <small>Give yourself a moment away from schoolwork.</small>
+            </span>
+            <span class="selfcare-emoji">☁️</span>
+          </label>
+
+          <label class="selfcare-item">
+            <input type="checkbox" value="moved">
+            <span class="selfcare-check"></span>
+            <span class="selfcare-copy">
+              <strong>Move in a way that feels good</strong>
+              <small>Stretch, walk, dance, or simply change position.</small>
+            </span>
+            <span class="selfcare-emoji">🌿</span>
+          </label>
+
+          <label class="selfcare-item">
+            <input type="checkbox" value="connected">
+            <span class="selfcare-check"></span>
+            <span class="selfcare-copy">
+              <strong>Connect with someone</strong>
+              <small>Send a message or spend time with someone you trust.</small>
+            </span>
+            <span class="selfcare-emoji">💌</span>
+          </label>
+
+          <label class="selfcare-item">
+            <input type="checkbox" value="outside">
+            <span class="selfcare-check"></span>
+            <span class="selfcare-copy">
+              <strong>Notice something around me</strong>
+              <small>Look outside, listen to music, or enjoy a quiet moment.</small>
+            </span>
+            <span class="selfcare-emoji">🌼</span>
+          </label>
+
+          <label class="selfcare-item">
+            <input type="checkbox" value="kindness">
+            <span class="selfcare-check"></span>
+            <span class="selfcare-copy">
+              <strong>Speak kindly to myself</strong>
+              <small>Remember that making mistakes is part of learning.</small>
+            </span>
+            <span class="selfcare-emoji">💜</span>
+          </label>
+
+          <label class="selfcare-item">
+            <input type="checkbox" value="sleep">
+            <span class="selfcare-check"></span>
+            <span class="selfcare-copy">
+              <strong>Make time for rest tonight</strong>
+              <small>Prepare for a comfortable and restful evening.</small>
+            </span>
+            <span class="selfcare-emoji">🌙</span>
+          </label>
+        </div>
+
+        <div class="button-row">
+          <button class="btn btn-secondary" id="resetSelfcare">Reset checklist</button>
+        </div>
+        <p class="message" id="selfcareMessage" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="card gentle-reminder">
+        <span class="reminder-icon">🌷</span>
+        <div>
+          <h3>Remember this.</h3>
+          <p>
+            Your worth isn't measured by how productive you are. Resting,
+            asking for help, and taking things slowly are valid, too.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CREATIVE CORNER PAGE -->
+    <section class="page" id="page-drawing">
+      <div class="page-intro">
+        <p class="eyebrow">EXPRESS YOURSELF</p>
+        <h2>Your creative corner.</h2>
+        <p>
+          Sometimes it's easier to express a feeling through colors and shapes
+          than through words. Draw freely—there's no right or wrong way to do it.
+        </p>
+      </div>
+
+      <div class="card drawing-card">
+        <div class="card-title-row">
+          <div>
+            <p class="eyebrow">A LITTLE CREATIVE BREAK</p>
+            <h3>Draw what's on your mind.</h3>
+          </div>
+          <span class="mini-icon">✎</span>
+        </div>
+
+        <div class="drawing-tools">
+          <div class="field tool-field">
+            <label for="drawColor">Pen color</label>
+            <input type="color" id="drawColor" value="#7662c9">
+          </div>
+
+          <div class="field tool-field">
+            <label for="drawSize">Brush size</label>
+            <select id="drawSize">
+              <option value="3">Small</option>
+              <option value="6" selected>Medium</option>
+              <option value="12">Large</option>
+              <option value="20">Extra large</option>
+            </select>
+          </div>
+
+          <button class="btn btn-secondary tool-button" id="eraserButton"
+            type="button">Eraser</button>
+          <button class="btn btn-secondary tool-button" id="clearCanvas"
+            type="button">Clear</button>
+          <button class="btn btn-primary tool-button" id="downloadDrawing"
+            type="button">Save drawing</button>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="drawingCanvas" aria-label="Drawing area"></canvas>
+        </div>
+
+        <p class="muted small-note">
+          Your drawing stays in this session unless you save it to your device.
+          If you clear the canvas, the drawing cannot be restored.
+        </p>
+        <p class="message" id="drawingMessage" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="grid creative-prompts">
+        <button class="card prompt-card" data-draw-prompt="Use colors that match your mood today.">
+          <span>🎨</span>
+          <strong>Color your mood</strong>
+          <p>Use colors that match how you feel.</p>
+        </button>
+        <button class="card prompt-card" data-draw-prompt="Draw a place where you feel safe and peaceful.">
+          <span>🏡</span>
+          <strong>My peaceful place</strong>
+          <p>Imagine a place where you can relax.</p>
+        </button>
+        <button class="card prompt-card" data-draw-prompt="Draw something that gives you hope.">
+          <span>🌱</span>
+          <strong>A little hope</strong>
+          <p>Draw something that helps you keep going.</p>
+        </button>
+      </div>
+      <p class="muted prompt-display" id="drawingPrompt"></p>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-logo">✿ MindCare</div>
+      <p>Made with care for student well-being.</p>
+      <p class="footer-small">
+        This website is a wellness companion, not a replacement for professional
+        mental health support.
+      </p>
+      <button class="text-button" id="backToTop">Back to top ↑</button>
+    </footer>
+
+  </main>
+</div>
+
+  
+<script>
+"use strict";
+
+/* ==========================================
+   MINDCARE — STUDENT SAFE SPACE
+   Main JavaScript
+========================================== */
+
+const $ = (selector, parent = document) =>
+  parent.querySelector(selector);
+
+const $$ = (selector, parent = document) =>
+  Array.from(parent.querySelectorAll(selector));
+
+const STORAGE_KEY = "mindcare_student_safe_space_v1";
+
+function loadData(key, fallback = []) {
+  try {
+    const data = JSON.parse(localStorage.getItem("mindcare_" + key));
+    return data === null ? fallback : data;
+  } catch (error) {
+    return fallback;
+  }
+}
+
+function saveData(key, value) {
+  try {
+    localStorage.setItem("mindcare_" + key, JSON.stringify(value));
+    return true;
+  } catch (error) {
+    console.warn("MindCare could not save data:", error);
+    return false;
+  }
+}
+
+function showMessage(elementOrSelector, message, isError = false) {
+  const element = typeof elementOrSelector === "string"
+    ? $(elementOrSelector)
+    : elementOrSelector;
+
+  if (!element) return;
+
+  element.textContent = message;
+  element.classList.add("visible");
+  element.classList.toggle("error", isError);
+
+  if (element._messageTimer) {
+    clearTimeout(element._messageTimer);
+  }
+
+  element._messageTimer = setTimeout(() => {
+    element.classList.remove("visible");
+  }, 4000);
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[character]);
+}
+
+function makeId() {
+  return Date.now().toString(36) +
+    Math.random().toString(36).slice(2, 9);
+}
+
+function formatDate(dateValue) {
+  const date = new Date(dateValue);
+
+  if (Number.isNaN(date.getTime())) return "";
+
+  return date.toLocaleString("en-PH", {
+    dateStyle: "medium",
+    timeStyle: "short"
+  });
+}
+
+function todayKey() {
+  const date = new Date();
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0")
+  ].join("-");
+}
+
+/* ==========================================
+   PAGE NAVIGATION
+========================================== */
+
+const pageTitles = {
+  home: "Welcome to MindCare",
+  mood: "Mood Tracker",
+  journal: "My Journal",
+  breathing: "Breathing Exercise",
+  affirmations: "Daily Affirmations",
+  resources: "Help & Resources",
+  wellness: "Daily Wellness",
+  selfcare: "Self-Care Checklist",
+  drawing: "Creative Corner"
+};
+
+function showPage(pageName) {
+  const target = $("#page-" + pageName);
+
+  if (!target) return;
+
+  $$(".page").forEach(page => {
+    page.classList.toggle("active", page === target);
+  });
+
+  $$(".nav-link").forEach(button => {
+    const selected = button.dataset.page === pageName;
+
+    button.classList.toggle("active", selected);
+
+    if (selected) {
+      button.setAttribute("aria-current", "page");
+    } else {
+      button.removeAttribute("aria-current");
+    }
+  });
+
+  const heading = $("#pageHeading");
+
+  if (heading) {
+    heading.textContent = pageTitles[pageName] || "MindCare";
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "auto"
+      : "smooth"
+  });
+
+  if (pageName === "drawing") {
+    requestAnimationFrame(resizeCanvas);
+  }
+}
+
+$$("[data-page]").forEach(button => {
+  button.addEventListener("click", () => {
+    showPage(button.dataset.page);
+  });
+});
+
+$$("[data-go]").forEach(button => {
+  button.addEventListener("click", () => {
+    showPage(button.dataset.go);
+  });
+});
+
+$("#todayLabel").textContent = new Date().toLocaleDateString("en-PH", {
+  weekday: "short",
+  month: "short",
+  day: "numeric"
+});
+
+$("#backToTop").addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+/* ==========================================
+   HOME PAGE — QUOTES
+========================================== */
+
+const homeQuotes = [
+  "You are allowed to be both a work in progress and proud of yourself.",
+  "You do not need to have everything figured out today.",
+  "Small steps are still progress.",
+  "Rest is not a reward you have to earn.",
+  "You deserve the same kindness you give to others.",
+  "One difficult moment does not define your whole story.",
+  "It is okay to ask for help when you need it.",
+  "Your worth is not measured by your productivity.",
+  "You can begin again, even after a difficult day.",
+  "Give yourself permission to grow at your own pace."
+];
+
+let quoteIndex = 0;
+
+$("#newQuote").addEventListener("click", () => {
+  if (homeQuotes.length > 1) {
+    let nextIndex;
+
+    do {
+      nextIndex = Math.floor(Math.random() * homeQuotes.length);
+    } while (nextIndex === quoteIndex);
+
+    quoteIndex = nextIndex;
+  }
+
+  $("#homeQuote").textContent = homeQuotes[quoteIndex];
+});
+
+/* ==========================================
+   MOOD TRACKER
+========================================== */
+
+let selectedMood = null;
+
+const moodGrid = $("#emotionGrid");
+
+moodGrid.addEventListener("click", event => {
+  const button = event.target.closest("[data-mood]");
+
+  if (!button) return;
+
+  selectedMood = {
+    name: button.dataset.mood,
+    emoji: button.dataset.emoji
+  };
+
+  $$(".emotion", moodGrid).forEach(item => {
+    const selected = item === button;
+
+    item.classList.toggle("selected", selected);
+    item.setAttribute("aria-pressed", String(selected));
+  });
+});
+
+function renderMoodHistory() {
+  const history = $("#moodHistory");
+  const moods = loadData("moods", []);
+
+  if (!moods.length) {
+    history.innerHTML =
+      '<p class="empty-state">Your saved check-ins will appear here.</p>';
+    return;
+  }
+
+  history.innerHTML = moods.map(item => `
+    <article class="entry">
+      <div class="entry-head">
+        <strong>${escapeHTML(item.emoji)} ${escapeHTML(item.mood)}</strong>
+        <span>${escapeHTML(formatDate(item.date))}</span>
+      </div>
+      ${item.note
+        ? `<p>${escapeHTML(item.note)}</p>`
+        : `<p class="muted">No additional note.</p>`}
+    </article>
+  `).join("");
+}
+
+$("#saveMood").addEventListener("click", () => {
+  if (!selectedMood) {
+    showMessage("#moodMessage", "Please choose a mood first.", true);
+    return;
+  }
+
+  const moods = loadData("moods", []);
+
+  moods.unshift({
+    id: makeId(),
+    mood: selectedMood.name,
+    emoji: selectedMood.emoji,
+    note: $("#moodNote").value.trim(),
+    date: new Date().toISOString()
+  });
+
+  if (!saveData("moods", moods)) {
+    showMessage(
+      "#moodMessage",
+      "Unable to save. Please check your browser storage.",
+      true
+    );
+    return;
+  }
+
+  $("#moodNote").value = "";
+  selectedMood = null;
+
+  $$(".emotion", moodGrid).forEach(button => {
+    button.classList.remove("selected");
+    button.setAttribute("aria-pressed", "false");
+  });
+
+  renderMoodHistory();
+
+  showMessage("#moodMessage", "Your mood check-in has been saved. 💜");
+});
+
+$("#clearMoods").addEventListener("click", () => {
+  const moods = loadData("moods", []);
+
+  if (!moods.length) {
+    showMessage("#moodMessage", "There is no mood history to clear.");
+    return;
+  }
+
+  if (!confirm("Clear all saved mood check-ins? This cannot be undone.")) {
+    return;
+  }
+
+  saveData("moods", []);
+  renderMoodHistory();
+  showMessage("#moodMessage", "Your mood history has been cleared.");
+});
+
+/* ==========================================
+   JOURNAL
+========================================== */
+
+const journalText = $("#journalText");
+const journalCount = $("#journalCount");
+const journalPrompt = $("#journalPrompt");
+
+function updateJournalCount() {
+  journalCount.textContent = journalText.value.length;
+}
+
+journalText.addEventListener("input", updateJournalCount);
+
+journalPrompt.addEventListener("change", () => {
+  const prompt = journalPrompt.value;
+
+  if (!prompt) return;
+
+  const currentText = journalText.value.trim();
+
+  if (currentText && !confirm(
+    "Add this prompt to your current draft?"
+  )) {
+    return;
+  }
+
+  journalText.value = currentText
+    ? currentText + "\n\n" + prompt + "\n"
+    : prompt + "\n";
+
+  updateJournalCount();
+  journalText.focus();
+});
+
+function renderJournalHistory() {
+  const history = $("#journalHistory");
+  const entries = loadData("journal", []);
+
+  if (!entries.length) {
+    history.innerHTML =
+      '<p class="empty-state">Your saved entries will appear here.</p>';
+    return;
+  }
+
+  history.innerHTML = entries.map(entry => `
+    <article class="entry">
+      <div class="entry-head">
+        <strong>${escapeHTML(entry.title || "Untitled entry")}</strong>
+        <span>${escapeHTML(formatDate(entry.date))}</span>
+      </div>
+      <p>${escapeHTML(entry.text)}</p>
+      <button
+        class="text-button delete-journal"
+        data-id="${escapeHTML(entry.id)}"
+        type="button"
+      >Delete entry</button>
+    </article>
+  `).join("");
+}
+
+$("#saveJournal").addEventListener("click", () => {
+  const title = $("#journalTitle").value.trim();
+  const text = journalText.value.trim();
+
+  if (!text) {
+    showMessage("#journalMessage", "Write something before saving.", true);
+    journalText.focus();
+    return;
+  }
+
+  const entries = loadData("journal", []);
+
+  entries.unshift({
+    id: makeId(),
+    title: title || "Untitled entry",
+    text,
+    date: new Date().toISOString()
+  });
+
+  if (!saveData("journal", entries)) {
+    showMessage(
+      "#journalMessage",
+      "Unable to save this entry. Check your browser storage.",
+      true
+    );
+    return;
+  }
+
+  $("#journalTitle").value = "";
+  journalText.value = "";
+  journalPrompt.value = "";
+  updateJournalCount();
+  renderJournalHistory();
+
+  showMessage("#journalMessage", "Your journal entry has been saved. 💜");
+});
+
+$("#clearJournal").addEventListener("click", () => {
+  if (!journalText.value && !$("#journalTitle").value) return;
+
+  if (!confirm("Clear your current unsaved draft?")) return;
+
+  $("#journalTitle").value = "";
+  journalText.value = "";
+  journalPrompt.value = "";
+  updateJournalCount();
+
+  showMessage("#journalMessage", "Draft cleared.");
+});
+
+$("#journalHistory").addEventListener("click", event => {
+  const button = event.target.closest(".delete-journal");
+
+  if (!button) return;
+
+  if (!confirm("Delete this journal entry?")) return;
+
+  const entries = loadData("journal", []).filter(
+    entry => entry.id !== button.dataset.id
+  );
+
+  saveData("journal", entries);
+  renderJournalHistory();
+  showMessage("#journalMessage", "Journal entry deleted.");
+});
+
+$("#clearJournalHistory").addEventListener("click", () => {
+  const entries = loadData("journal", []);
+
+  if (!entries.length) {
+    showMessage("#journalMessage", "There are no saved entries to clear.");
+    return;
+  }
+
+  if (!confirm("Delete all saved journal entries? This cannot be undone.")) {
+    return;
+  }
+
+  saveData("journal", []);
+  renderJournalHistory();
+  showMessage("#journalMessage", "All saved journal entries were cleared.");
+});
+
+/* ==========================================
+   BREATHING EXERCISE
+========================================== */
+
+let breathingInterval = null;
+let breathingRunning = false;
+let breathingStartedAt = 0;
+let breathingDurationSeconds = 60;
+
+const breathingPhases = [
+  {
+    name: "Breathe in",
+    duration: 4,
+    caption: "Gently breathe in, only as comfortably as you can.",
+    className: "inhale"
+  },
+  {
+    name: "Breathe out",
+    duration: 6,
+    caption: "Slowly breathe out. Keep it gentle and natural.",
+    className: "exhale"
+  }
+];
+
+function stopBreathing(completed = false) {
+  if (breathingInterval !== null) {
+    clearInterval(breathingInterval);
+    breathingInterval = null;
+  }
+
+  breathingRunning = false;
+
+  $("#breathingCircle").classList.remove("inhale", "exhale");
+  $("#breathingInstruction").textContent = completed ? "Well done!" : "Ready?";
+  $("#breathingCountdown").textContent = "—";
+
+  $("#startBreathing").disabled = false;
+  $("#breathingCaption").textContent = completed
+    ? "Your breathing session is complete. Take a moment before continuing."
+    : "Find a comfortable position and relax your shoulders.";
+
+  if (completed) {
+    showMessage("#breathingMessage", "You completed your breathing break. 🌿");
+  }
+}
+
+function runBreathingTick() {
+  if (!breathingRunning) return;
+
+  const elapsed = Math.floor((Date.now() - breathingStartedAt) / 1000);
+  const remaining = breathingDurationSeconds - elapsed;
+
+  if (remaining <= 0) {
+    stopBreathing(true);
+    return;
+  }
+
+  const cycleLength = 10;
+  const cyclePosition = elapsed % cycleLength;
+
+  const phase = cyclePosition < 4
+    ? breathingPhases[0]
+    : breathingPhases[1];
+
+  const phaseElapsed = cyclePosition < 4
+    ? cyclePosition
+    : cyclePosition - 4;
+
+  const phaseRemaining = phase.duration - phaseElapsed;
+
+  $("#breathingInstruction").textContent = phase.name;
+  $("#breathingCountdown").textContent = phaseRemaining;
+  $("#breathingCaption").textContent = phase.caption;
+
+  $("#breathingCircle").classList.toggle(
+    "inhale",
+    phase.className === "inhale"
+  );
+
+  $("#breathingCircle").classList.toggle(
+    "exhale",
+    phase.className === "exhale"
+  );
+}
+
+$("#startBreathing").addEventListener("click", () => {
+  if (breathingRunning) return;
+
+  breathingDurationSeconds = Number($("#breathingDuration").value) || 60;
+  breathingStartedAt = Date.now();
+  breathingRunning = true;
+
+  $("#startBreathing").disabled = true;
+
+  showMessage("#breathingMessage", "Follow the circle at a comfortable pace.");
+
+  runBreathingTick();
+
+  breathingInterval = setInterval(runBreathingTick, 250);
+});
+
+$("#stopBreathing").addEventListener("click", () => {
+  stopBreathing(false);
+  showMessage("#breathingMessage", "Session stopped. Breathe normally.");
+});
+
+/* ==========================================
+   AFFIRMATIONS
+========================================== */
+
+const affirmations = [
+  "I am allowed to learn, grow, and take things one step at a time.",
+  "I do not have to be perfect to be worthy of kindness.",
+  "My pace is valid, even when it is different from everyone else's.",
+  "Rest is part of taking care of myself, not a failure.",
+  "I can ask for help when things feel difficult.",
+  "One difficult day does not define my whole story.",
+  "I deserve respect, care, and understanding.",
+  "I can be proud of small steps forward.",
+  "My feelings matter, even when they are difficult to explain.",
+  "I am learning to treat myself with patience.",
+  "I can make mistakes and still deserve compassion.",
+  "I do not need to compare my journey with someone else's.",
+  "I am allowed to take a break when I need one.",
+  "I can focus on what is within my control today.",
+  "I deserve support from people who treat me with care."
+];
+
+function setAffirmation(text) {
+  $("#affirmationText").textContent = text;
+  $("#affirmationMessage").classList.remove("visible");
+}
+
+$("#newAffirmation").addEventListener("click", () => {
+  const current = $("#affirmationText").textContent;
+  const options = affirmations.filter(item => item !== current);
+  const next = options[Math.floor(Math.random() * options.length)];
+
+  setAffirmation(next);
+});
+
+$("#affirmationGrid").addEventListener("click", event => {
+  const button = event.target.closest("[data-affirmation]");
+
+  if (!button) return;
+
+  setAffirmation(button.dataset.affirmation);
+
+  $("#affirmationText").scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+});
+
+function renderSavedAffirmations() {
+  const container = $("#savedAffirmations");
+  const saved = loadData("affirmations", []);
+
+  if (!saved.length) {
+    container.innerHTML =
+      '<p class="empty-state">Affirmations you save will appear here.</p>';
+    return;
+  }
+
+  container.innerHTML = saved.map(item => `
+    <article class="entry">
+      <p>${escapeHTML(item.text)}</p>
+      <button
+        class="text-button delete-affirmation"
+        data-id="${escapeHTML(item.id)}"
+        type="button"
+      >Remove saved affirmation</button>
+    </article>
+  `).join("");
+}
+
+$("#saveAffirmation").addEventListener("click", () => {
+  const text = $("#affirmationText").textContent.trim();
+  const saved = loadData("affirmations", []);
+
+  if (saved.some(item => item.text === text)) {
+    showMessage("#affirmationMessage", "This affirmation is already saved.");
+    return;
+  }
+
+  saved.unshift({
+    id: makeId(),
+    text,
+    date: new Date().toISOString()
+  });
+
+  if (!saveData("affirmations", saved)) {
+    showMessage(
+      "#affirmationMessage",
+      "Unable to save this affirmation.",
+      true
+    );
+    return;
+  }
+
+  renderSavedAffirmations();
+  showMessage("#affirmationMessage", "Affirmation saved. 💜");
+});
+
+$("#savedAffirmations").addEventListener("click", event => {
+  const button = event.target.closest(".delete-affirmation");
+
+  if (!button) return;
+
+  const saved = loadData("affirmations", []).filter(
+    item => item.id !== button.dataset.id
+  );
+
+  saveData("affirmations", saved);
+  renderSavedAffirmations();
+});
+
+$("#clearAffirmations").addEventListener("click", () => {
+  const saved = loadData("affirmations", []);
+
+  if (!saved.length) {
+    showMessage("#affirmationMessage", "There are no saved affirmations.");
+    return;
+  }
+
+  if (!confirm("Remove all saved affirmations?")) return;
+
+  saveData("affirmations", []);
+  renderSavedAffirmations();
+  showMessage("#affirmationMessage", "Saved affirmations cleared.");
+});
+
+/* ==========================================
+   DAILY WELLNESS
+========================================== */
+
+function renderWellnessHistory() {
+  const container = $("#wellnessHistory");
+  const entries = loadData("wellness", []);
+
+  if (!entries.length) {
+    container.innerHTML =
+      '<p class="empty-state">Your saved reflections will appear here.</p>';
+    return;
+  }
+
+  container.innerHTML = entries.map(item => `
+    <article class="entry">
+      <div class="entry-head">
+        <strong>My daily reflection</strong>
+        <span>${escapeHTML(formatDate(item.date))}</span>
+      </div>
+      ${item.options.length
+        ? `<p><strong>I need:</strong> ${escapeHTML(item.options.join(", "))}</p>`
+        : ""}
+      <p>${escapeHTML(item.reflection || "No written reflection.")}</p>
+    </article>
+  `).join("");
+}
+
+$("#saveWellness").addEventListener("click", () => {
+  const options = $$("#wellnessOptions input:checked").map(
+    checkbox => checkbox.value
+  );
+
+  const reflection = $("#wellnessReflection").value.trim();
+
+  if (!options.length && !reflection) {
+    showMessage(
+      "#wellnessMessage",
+      "Choose an option or write a short reflection first.",
+      true
+    );
+    return;
+  }
+
+  const entries = loadData("wellness", []);
+
+  entries.unshift({
+    id: makeId(),
+    options,
+    reflection,
+    date: new Date().toISOString()
+  });
+
+  if (!saveData("wellness", entries)) {
+    showMessage("#wellnessMessage", "Unable to save your reflection.", true);
+    return;
+  }
+
+  $$("#wellnessOptions input").forEach(input => {
+    input.checked = false;
+  });
+
+  $("#wellnessReflection").value = "";
+
+  renderWellnessHistory();
+
+  showMessage("#wellnessMessage", "Your reflection has been saved. 🌷");
+});
+
+$("#clearWellnessHistory").addEventListener("click", () => {
+  const entries = loadData("wellness", []);
+
+  if (!entries.length) {
+    showMessage("#wellnessMessage", "There are no saved reflections.");
+    return;
+  }
+
+  if (!confirm("Clear all saved daily wellness reflections?")) return;
+
+  saveData("wellness", []);
+  renderWellnessHistory();
+  showMessage("#wellnessMessage", "Reflection history cleared.");
+});
+
+/* ==========================================
+   SELF-CARE CHECKLIST
+========================================== */
+
+function updateSelfcareProgress() {
+  const items = $$("#selfcareList input[type='checkbox']");
+  const completed = items.filter(item => item.checked).length;
+  const total = items.length;
+  const percent = total ? Math.round((completed / total) * 100) : 0;
+
+  $("#selfcareProgressText").textContent =
+    `${completed} of ${total} completed`;
+
+  $("#selfcareProgressPercent").textContent = `${percent}%`;
+
+  $("#selfcareProgressFill").style.width
+    `${percent}%`;
+
+  $("#selfcareProgress").setAttribute("aria-valuenow", String(percent));
+
+  saveData("selfcare", {
+    date: todayKey(),
+    checked: items
+      .filter(item => item.checked)
+      .map(item => item.value)
+  });
+
+  items.forEach(input => {
+    const item = input.closest(".selfcare-item");
+
+    if (item) {
+      item.classList.toggle("completed", input.checked);
+    }
+  });
+
+  if (total > 0 && completed === total) {
+    showMessage(
+      "#selfcareMessage",
+      "You checked every item. Remember, you are worthy of care even on days when you do less. 💜"
+    );
+  }
+}
+
+function restoreSelfcareProgress() {
+  const saved = loadData("selfcare", {});
+  const sameDay = saved.date === todayKey();
+  const checkedItems = sameDay && Array.isArray(saved.checked)
+    ? saved.checked
+    : [];
+
+  $$("#selfcareList input[type='checkbox']").forEach(input => {
+    input.checked = checkedItems.includes(input.value);
+  });
+
+  updateSelfcareProgress();
+}
+
+$("#selfcareList").addEventListener("change", event => {
+  if (event.target.matches("input[type='checkbox']")) {
+    updateSelfcareProgress();
+  }
+});
+
+$("#resetSelfcare").addEventListener("click", () => {
+  const anyChecked = $$("#selfcareList input[type='checkbox']")
+    .some(input => input.checked);
+
+  if (anyChecked && !confirm("Reset all checklist items for today?")) {
+    return;
+  }
+
+  $$("#selfcareList input[type='checkbox']").forEach(input => {
+    input.checked = false;
+  });
+
+  updateSelfcareProgress();
+  showMessage("#selfcareMessage", "Your checklist has been reset.");
+});
+
+/* ==========================================
+   CREATIVE CORNER — DRAWING CANVAS
+========================================== */
+
+const canvas = $("#drawingCanvas");
+const context = canvas.getContext("2d");
+
+let isDrawing = false;
+let isErasing = false;
+let lastX = 0;
+let lastY = 0;
+
+function resizeCanvas() {
+  if (!canvas || !context) return;
+
+  const rect = canvas.getBoundingClientRect();
+
+  if (!rect.width || !rect.height) return;
+
+  const ratio = Math.max(1, window.devicePixelRatio || 1);
+
+  const oldCanvas = document.createElement("canvas");
+  oldCanvas.width = canvas.width;
+  oldCanvas.height = canvas.height;
+
+  if (oldCanvas.width && oldCanvas.height) {
+    oldCanvas.getContext("2d").drawImage(canvas, 0, 0);
+  }
+
+  canvas.width = Math.round(rect.width * ratio);
+  canvas.height = Math.round(rect.height * ratio);
+
+  context.setTransform(ratio, 0, 0, ratio, 0, 0);
+  context.lineCap = "round";
+  context.lineJoin = "round";
+  context.fillStyle = "#ffffff";
+  context.fillRect(0, 0, rect.width, rect.height);
+
+  if (oldCanvas.width && oldCanvas.height) {
+    context.drawImage(
+      oldCanvas,
+      0,
+      0,
+      oldCanvas.width,
+      oldCanvas.height,
+      0,
+      0,
+      rect.width,
+      rect.height
+    );
+  }
+}
+
+function getCanvasPosition(event) {
+  const rect = canvas.getBoundingClientRect();
+
+  return {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top
+  };
+}
+
+function startDrawing(event) {
+  if (event.pointerType === "mouse" && event.button !== 0) return;
+
+  event.preventDefault();
+  isDrawing = true;
+
+  const position = getCanvasPosition(event);
+
+  lastX = position.x;
+  lastY = position.y;
+
+  if (canvas.setPointerCapture) {
+    try {
+      canvas.setPointerCapture(event.pointerId);
+    } catch (error) {
+      // Continue if pointer capture is unavailable.
+    }
+  }
+
+  context.beginPath();
+  context.arc(
+    lastX,
+    lastY,
+    Number($("#drawSize").value) / 2,
+    0,
+    Math.PI * 2
+  );
+
+  context.fillStyle = isErasing ? "#ffffff" : $("#drawColor").value;
+  context.fill();
+}
+
+function draw(event) {
+  if (!isDrawing) return;
+
+  event.preventDefault();
+
+  const position = getCanvasPosition(event);
+
+  context.beginPath();
+  context.moveTo(lastX, lastY);
+  context.lineTo(position.x, position.y);
+
+  context.lineWidth = Number($("#drawSize").value);
+  context.lineCap = "round";
+  context.lineJoin = "round";
+  context.strokeStyle = isErasing ? "#ffffff" : $("#drawColor").value;
+  context.stroke();
+
+  lastX = position.x;
+  lastY = position.y;
+}
+
+function stopDrawing() {
+  isDrawing = false;
+}
+
+canvas.addEventListener("pointerdown", startDrawing);
+canvas.addEventListener("pointermove", draw);
+canvas.addEventListener("pointerup", stopDrawing);
+canvas.addEventListener("pointercancel", stopDrawing);
+canvas.addEventListener("lostpointercapture", stopDrawing);
+
+$("#eraserButton").addEventListener("click", () => {
+  isErasing = !isErasing;
+
+  $("#eraserButton").textContent = isErasing
+    ? "Use pen"
+    : "Eraser";
+
+  $("#eraserButton").classList.toggle("active", isErasing);
+});
+
+$("#clearCanvas").addEventListener("click", () => {
+  if (!confirm("Clear the whole drawing? This cannot be undone.")) return;
+
+  const rect = canvas.getBoundingClientRect();
+
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = "#ffffff";
+  context.fillRect(0, 0, rect.width, rect.height);
+
+  showMessage("#drawingMessage", "Canvas cleared. Start a new drawing!");
+});
+
+$("#downloadDrawing").addEventListener("click", () => {
+  try {
+    const downloadCanvas = document.createElement("canvas");
+    downloadCanvas.width = canvas.width;
+    downloadCanvas.height = canvas.height;
+
+    const downloadContext = downloadCanvas.getContext("2d");
+
+    downloadContext.fillStyle = "#ffffff";
+    downloadContext.fillRect(
+      0,
+      0,
+      downloadCanvas.width,
+      downloadCanvas.height
+    );
+
+    downloadContext.drawImage(canvas, 0, 0);
+
+    const link = document.createElement("a");
+    link.download = "mindcare-drawing.png";
+    link.href = downloadCanvas.toDataURL("image/png");
+    link.click();
+
+    showMessage(
+      "#drawingMessage",
+      "Your drawing has been prepared for saving."
+    );
+  } catch (error) {
+    showMessage(
+      "#drawingMessage",
+      "Unable to save the drawing on this device.",
+      true
+    );
+  }
+});
+
+$$("[data-draw-prompt]").forEach(button => {
+  button.addEventListener("click", () => {
+    $("#drawingPrompt").textContent =
+      "Your prompt: " + button.dataset.drawPrompt;
+
+    showMessage(
+      "#drawingMessage",
+      "Take your time and draw whatever comes to mind."
+    );
+  });
+});
+
+window.addEventListener("resize", resizeCanvas);
+
+/* ==========================================
+   INITIALIZE ALL FEATURES
+========================================== */
+
+function initializeMindCare() {
+  renderMoodHistory();
+  renderJournalHistory();
+  renderSavedAffirmations();
+  renderWellnessHistory();
+  restoreSelfcareProgress();
+  updateJournalCount();
+
+  if (canvas) {
+    resizeCanvas();
+  }
+
+  showPage("home");
+}
+
+initializeMindCare();
+
+/* ==========================================
+   END OF MINDCARE JAVASCRIPT
+========================================== */
+</script>
+</body>
+</html>
+
+  
